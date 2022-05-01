@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GroceryListApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220501161740_CreateDatabase")]
+    [Migration("20220501164442_CreateDatabase")]
     partial class CreateDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,7 +43,7 @@ namespace GroceryListApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GroceryList");
+                    b.ToTable("GroceryLists");
                 });
 
             modelBuilder.Entity("GroceryListApi.Models.GroceryListItem", b =>

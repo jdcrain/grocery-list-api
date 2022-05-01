@@ -1,4 +1,5 @@
 using GroceryListApi.Models;
+using GroceryListApi.Repositories.GroceryList;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,10 @@ namespace GroceryListApi
             services.AddDbContext<AppDbContext>(opt => {
                 opt.UseNpgsql(Configuration.GetConnectionString("GroceryListApiConnection"));
             });
+
+            #region Repositories
+            services.AddTransient<IGroceryListRepository, GroceryListRepository>();
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

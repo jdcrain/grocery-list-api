@@ -17,12 +17,12 @@ namespace GroceryListApi.Models
                 .HasForeignKey(item => item.GroceryListId);
 
             modelBuilder.Entity<GroceryList>()
-                .Property(cart => cart.Created)
+                .Property(list => list.Created)
                 .HasDefaultValueSql("current_timestamp at time zone 'utc'")
                 .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<GroceryList>()
-                .Property(cart => cart.LastModified)
+                .Property(list => list.LastModified)
                 .HasDefaultValueSql("current_timestamp at time zone 'utc'")
                 .ValueGeneratedOnAddOrUpdate();
 
@@ -31,7 +31,7 @@ namespace GroceryListApi.Models
                 .HasIndex(item => item.GroceryListId);
         }
 
-        public DbSet<GroceryList> GroceryList { get; set; }
+        public DbSet<GroceryList> GroceryLists { get; set; }
         public DbSet<GroceryListItem> GroceryListItems { get; set; }
     }
 }

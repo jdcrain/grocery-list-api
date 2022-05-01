@@ -9,7 +9,7 @@ namespace GroceryListApi.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "GroceryList",
+                name: "GroceryLists",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -20,7 +20,7 @@ namespace GroceryListApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GroceryList", x => x.Id);
+                    table.PrimaryKey("PK_GroceryLists", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -36,9 +36,9 @@ namespace GroceryListApi.Migrations
                 {
                     table.PrimaryKey("PK_GroceryListItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_GroceryListItems_GroceryList_GroceryListId",
+                        name: "FK_GroceryListItems_GroceryLists_GroceryListId",
                         column: x => x.GroceryListId,
-                        principalTable: "GroceryList",
+                        principalTable: "GroceryLists",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -55,7 +55,7 @@ namespace GroceryListApi.Migrations
                 name: "GroceryListItems");
 
             migrationBuilder.DropTable(
-                name: "GroceryList");
+                name: "GroceryLists");
         }
     }
 }

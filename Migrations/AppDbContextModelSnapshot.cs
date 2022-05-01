@@ -41,7 +41,7 @@ namespace GroceryListApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GroceryList");
+                    b.ToTable("GroceryLists");
                 });
 
             modelBuilder.Entity("GroceryListApi.Models.GroceryListItem", b =>
