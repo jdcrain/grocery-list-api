@@ -13,18 +13,18 @@ namespace GroceryListApi.Repositories.GroceryList
         public Task<GroceryListDto> GetAsync(int id);
 
         /// <summary>
-        /// Creates a new Grocery list
+        /// Creates a new grocery list
         /// </summary>
-        /// <param name="GroceryList">New grocery list to create</param>
+        /// <param name="groceryList">New grocery list to create</param>
         /// <returns>Grocery list that was persisted to the database</returns>
-        public Task<GroceryListDto> CreateAsync(GroceryListDto GroceryList);
+        public Task<GroceryListDto> CreateAsync(GroceryListDto groceryList);
 
         /// <summary>
         /// Updates an existing grocery list
         /// </summary>
-        /// <param name="GroceryList">Updated grocery list</param>
+        /// <param name="groceryList">Updated grocery list</param>
         /// <returns>Updated grocery list record</returns>
-        public Task<GroceryListDto> UpdateAsync(GroceryListDto GroceryList);
+        public Task<GroceryListDto> UpdateAsync(GroceryListDto groceryList);
 
 
         /// <summary>

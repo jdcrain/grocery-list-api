@@ -1,5 +1,6 @@
 using GroceryListApi.Models;
 using GroceryListApi.Repositories.GroceryList;
+using GroceryListApi.Repositories.GroceryListItem;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,7 @@ namespace GroceryListApi
 
             #region Repositories
             services.AddTransient<IGroceryListRepository, GroceryListRepository>();
+            services.AddTransient<IGroceryListItemRepository, GroceryListItemRepository>();
             #endregion
         }
 
