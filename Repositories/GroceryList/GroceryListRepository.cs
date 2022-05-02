@@ -76,6 +76,7 @@ namespace GroceryListApi.Repositories.GroceryList
             // verify that the grocery list belongs to the user
             var listBelongsToUser = _context.GroceryLists
                                         .Where(list => list.Id == groceryList.Id && list.UserId == userId)
+                                        .AsNoTracking()
                                         .FirstOrDefault() != null ? true : false;
 
             if (!listBelongsToUser)

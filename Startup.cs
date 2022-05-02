@@ -73,14 +73,14 @@ namespace GroceryListApi
 
             app.UseRouting();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
-
             app.UseCors(a => 
                 a.SetIsOriginAllowedToAllowWildcardSubdomains()
                 .WithOrigins(Configuration.GetConnectionString("AllowedOrigins").Split(","))
                 .AllowAnyMethod()
                 .AllowAnyHeader());
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
