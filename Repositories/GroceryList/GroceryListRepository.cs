@@ -21,16 +21,33 @@ namespace GroceryListApi.Repositories.GroceryList
         }
 
         /// <inheritdoc />
-        public async Task<GroceryListDto> GetAsync(int id)
+        public async Task<GroceryListDto> GetAsync(int id, int userId)
         {
             var groceryList = await _context.GroceryLists
-                .Where(list => list.Id == id)
+                .Where(list => list.Id == id && list.UserId == userId)
                 .Include(list => list.GroceryListItems)
                 .SingleOrDefaultAsync();
 
             if (groceryList == null)
             {
                 return null;
+            }
+
+            return _mapper.Map<GroceryListDto>(groceryList);
+        }
+
+        /// <inheritdoc />
+        public async Task<GroceryListDto> GetByUserAsync(int userId)
+        {
+            var groceryList = await _context.GroceryLists
+                .Where(list => list.UserId == userId)
+                .Include(list => list.GroceryListItems)
+                .SingleOrDefaultAsync();
+
+            if (groceryList == null)
+            {
+                // if they don't have a grocery list for some reason, create one for them
+                return await CreateAsync(new GroceryListDto() { UserId = userId });
             }
 
             return _mapper.Map<GroceryListDto>(groceryList);
@@ -49,9 +66,19 @@ namespace GroceryListApi.Repositories.GroceryList
         }
 
         /// <inheritdoc />
-        public async Task<GroceryListDto> UpdateAsync(GroceryListDto groceryList)
+        public async Task<GroceryListDto> UpdateAsync(GroceryListDto groceryList, int userId)
         {
             if (groceryList.Id == 0)
+            {
+                return null;
+            }
+
+            // verify that the grocery list belongs to the user
+            var listBelongsToUser = _context.GroceryLists
+                                        .Where(list => list.Id == groceryList.Id && list.UserId == userId)
+                                        .FirstOrDefault() != null ? true : false;
+
+            if (!listBelongsToUser)
             {
                 return null;
             }
@@ -83,10 +110,10 @@ namespace GroceryListApi.Repositories.GroceryList
 
 
         /// <inheritdoc />
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id, int userId)
         {
             var groceryList = await _context.GroceryLists
-                .Where(list => list.Id == id)
+                .Where(list => list.Id == id && list.UserId == userId)
                 .Include(list => list.GroceryListItems)
                 .SingleOrDefaultAsync();
 

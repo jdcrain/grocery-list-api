@@ -10,7 +10,14 @@ namespace GroceryListApi.Repositories.GroceryList
         /// </summary>
         /// <param name="id">Id to retrieve the grocery list by</param>
         /// <returns>Grocery list with the given Id</returns>
-        public Task<GroceryListDto> GetAsync(int id);
+        public Task<GroceryListDto> GetAsync(int id, int userId);
+
+        /// <summary>
+        /// Retrieves a Grocery list that belongs to the user
+        /// </summary>
+        /// <param name="id">User id to retrieve the grocery list by</param>
+        /// <returns>Grocery list with the given user Id</returns>
+        public Task<GroceryListDto> GetByUserAsync(int userId);
 
         /// <summary>
         /// Creates a new grocery list
@@ -24,14 +31,13 @@ namespace GroceryListApi.Repositories.GroceryList
         /// </summary>
         /// <param name="groceryList">Updated grocery list</param>
         /// <returns>Updated grocery list record</returns>
-        public Task<GroceryListDto> UpdateAsync(GroceryListDto groceryList);
-
+        public Task<GroceryListDto> UpdateAsync(GroceryListDto groceryList, int userId);
 
         /// <summary>
         /// Deletes a grocery list
         /// </summary>
         /// <param name="id">Id of the grocery list to delete</param>
         /// <returns></returns>
-        public Task DeleteAsync(int id);
+        public Task DeleteAsync(int id, int userId);
     }
 }

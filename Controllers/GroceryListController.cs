@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using GroceryListApi.DTOs;
 using GroceryListApi.Exceptions;
 using GroceryListApi.Repositories.GroceryList;
@@ -20,10 +22,20 @@ namespace GroceryListAPI.Controllers
             _groceryListRepository = groceryListRepository;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<GroceryListDto>> GetGroceryListAsync()
+        {
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+
+            return await _groceryListRepository.GetByUserAsync(userId);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<GroceryListDto>> GetGroceryListAsync(int id)
         {
-            var groceryList = await _groceryListRepository.GetAsync(id);
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+
+            var groceryList = await _groceryListRepository.GetAsync(id, userId);
 
             if (groceryList == null)
             {
@@ -36,6 +48,9 @@ namespace GroceryListAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateGroceryListAsync([FromBody] GroceryListDto groceryList)
         {
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            groceryList.UserId = userId;
+
             var createdGroceryList = await _groceryListRepository.CreateAsync(groceryList);
 
             return CreatedAtRoute(new { id = createdGroceryList.Id }, createdGroceryList);
@@ -44,7 +59,9 @@ namespace GroceryListAPI.Controllers
         [HttpPatch]
         public async Task<IActionResult> UpdateGroceryListAsync([FromBody] GroceryListDto groceryList)
         {
-            var updatedGroceryList = await _groceryListRepository.UpdateAsync(groceryList);
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+
+            var updatedGroceryList = await _groceryListRepository.UpdateAsync(groceryList, userId);
 
             if (updatedGroceryList == null)
             {
@@ -57,9 +74,11 @@ namespace GroceryListAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteGroceryListAsync(int id)
         {
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+
             try
             {
-                await _groceryListRepository.DeleteAsync(id);
+                await _groceryListRepository.DeleteAsync(id, userId);
 
                 return NoContent();
             }
