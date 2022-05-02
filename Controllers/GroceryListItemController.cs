@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using GroceryListApi.DTOs;
 using GroceryListApi.Exceptions;
 using GroceryListApi.Repositories.GroceryListItem;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GroceryListAPI.Controllers
@@ -10,6 +11,7 @@ namespace GroceryListAPI.Controllers
     [Route("groceryListItem")]
     [Produces("application/json")]
     [ApiController]
+    [Authorize]
     public class GroceryListItemController : ControllerBase
     {
         private readonly IGroceryListItemRepository _groceryListItemRepository;

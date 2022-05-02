@@ -1,12 +1,16 @@
 using GroceryListApi.Models;
 using GroceryListApi.Repositories.GroceryList;
 using GroceryListApi.Repositories.GroceryListItem;
+using GroceryListApi.Repositories.User;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace GroceryListApi
 {
@@ -30,11 +34,32 @@ namespace GroceryListApi
                 opt.UseNpgsql(Configuration.GetConnectionString("GroceryListApiConnection"));
             });
 
+            var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["JWT_SECRET"])); // create a signing key so that we know we created the JWT
+            var creds = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
+
+            // add signing key and credentials as singletons to use the same values across all requests
+            services.AddSingleton(signingKey);
+            services.AddSingleton(creds);
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false, // secret key may be shared with other services in our application, so set to false
+                        ValidateAudience = false, // secret key may be shared with other services in our application, so set to false
+                        ValidateLifetime = true, // verify token hasn't expired
+                        ValidateIssuerSigningKey = true, // validate issuer signing key so we know the key is coming from the secret value
+                        IssuerSigningKey = signingKey
+                    };
+                });
+
             services.AddCors();
 
             #region Repositories
             services.AddTransient<IGroceryListRepository, GroceryListRepository>();
             services.AddTransient<IGroceryListItemRepository, GroceryListItemRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
             #endregion
         }
 
@@ -50,6 +75,7 @@ namespace GroceryListApi
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseCors(a => 

@@ -22,6 +22,8 @@ namespace GroceryListApi.Models
         [Index(IsUnique = true)]
         public int UserId { get; set; }
 
+        public virtual User User { get; set; }
+
         public virtual ICollection<GroceryListItem> GroceryListItems { get; set; }
     }
 }

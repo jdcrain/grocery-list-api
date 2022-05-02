@@ -13,6 +13,9 @@ namespace GroceryListApi.Profiles
 
             CreateMap<GroceryList, GroceryListDto>()
                 .ReverseMap();
+
+            CreateMap<User, UserDto>()
+                .ReverseMap();
         }
     }
 }
