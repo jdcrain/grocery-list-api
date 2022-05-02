@@ -1,6 +1,5 @@
 using GroceryListApi.Models;
 using GroceryListApi.Repositories.GroceryList;
-using GroceryListApi.Repositories.GroceryListItem;
 using GroceryListApi.Repositories.User;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -58,7 +57,6 @@ namespace GroceryListApi
 
             #region Repositories
             services.AddTransient<IGroceryListRepository, GroceryListRepository>();
-            services.AddTransient<IGroceryListItemRepository, GroceryListItemRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
             #endregion
         }
