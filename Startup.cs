@@ -30,6 +30,8 @@ namespace GroceryListApi
                 opt.UseNpgsql(Configuration.GetConnectionString("GroceryListApiConnection"));
             });
 
+            services.AddCors();
+
             #region Repositories
             services.AddTransient<IGroceryListRepository, GroceryListRepository>();
             services.AddTransient<IGroceryListItemRepository, GroceryListItemRepository>();
@@ -49,6 +51,12 @@ namespace GroceryListApi
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors(a => 
+                a.SetIsOriginAllowedToAllowWildcardSubdomains()
+                .WithOrigins(Configuration.GetConnectionString("AllowedOrigins").Split(","))
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
             app.UseEndpoints(endpoints =>
             {
